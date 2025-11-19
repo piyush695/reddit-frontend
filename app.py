@@ -7,7 +7,7 @@ import plotly.express as px
 # import os
 # API_URL = os.getenv("API_URL")
 
-API_URL = "https://backend-713956948.europe-west1.run.app"
+API_URL = "https://reddit-backend-688552756595.europe-west1.run.app/"
 
 st.set_page_config(
     page_title="Prop Firm Reddit Marketing Analytics",
@@ -413,4 +413,5 @@ elif view == "AI Narrative Summary":
 
                     st.markdown("**Timeline (last buckets)**")
                     st.json(metrics.get("timeline", []))
+
 
