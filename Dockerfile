@@ -1,43 +1,34 @@
+@"
 FROM python:3.11-slim
 
 WORKDIR /app
 
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy requirements and install Python dependencies
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY backend.py .
+# Copy application files
+COPY app.py .
 
+# Expose port
 EXPOSE 8080
 
+# Streamlit configuration
 ENV PORT=8080
+ENV STREAMLIT_SERVER_PORT=8080
+ENV STREAMLIT_SERVER_ADDRESS=0.0.0.0
+ENV STREAMLIT_SERVER_HEADLESS=true
+ENV STREAMLIT_BROWSER_GATHER_USAGE_STATS=false
 
-CMD ["python", "-m", "uvicorn", "backend:app", "--host", "0.0.0.0", "--port", "8080"]
-```
+# Health check
+HEALTHCHECK CMD curl --fail http://localhost:8080/_stcore/health || exit 1
 
----
-
-### **Issue 3: Python Package Install Failed**
-
-**Error message contains:**
-```
-ERROR: Could not find a version that satisfies
-```
-
-**Fix:** Check requirements.txt format
-
-**Your requirements.txt should be:**
-```
-fastapi==0.104.1
-uvicorn[standard]==0.24.0
-pydantic==2.5.0
-requests==2.31.0
-python-multipart==0.0.6
-```
-
----
-
-### **Issue 4: Build Timeout**
-
-**Error message contains:**
-```
-timeout
+# Run Streamlit
+CMD streamlit run app.py --server.port=8080 --server.address=0.0.0.0
+"@ | Out-File -FilePath Dockerfile -Encoding UTF8
