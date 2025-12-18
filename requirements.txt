@@ -1,9 +1,12 @@
 fastapi
 uvicorn
-streamlit
 pymongo
 python-dotenv
 openai
 plotly
 pandas
-requests
+streamlit==1.28.0
+requests==2.31.0
+Pillow==10.1.0
+
+
